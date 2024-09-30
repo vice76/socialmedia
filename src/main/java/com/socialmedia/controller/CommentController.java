@@ -17,7 +17,7 @@ import com.socialmedia.model.Response;
 import com.socialmedia.model.UserComment;
 import com.socialmedia.service.UserCommentService;
 
-import jakarta.websocket.server.PathParam;
+//import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/user/post")
