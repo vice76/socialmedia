@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.socialmedia.model.CommentsDTO;
 import com.socialmedia.model.Response;
+import com.socialmedia.model.User;
 import com.socialmedia.model.UserComment;
+import com.socialmedia.repository.UserRepository;
 import com.socialmedia.service.UserCommentService;
 
 //import jakarta.websocket.server.PathParam;
@@ -28,16 +30,21 @@ public class CommentController {
 	
     @Autowired
     private NotificationController notificationController;
+    
+    @Autowired
+	private UserRepository userRepository;
 	
 	
 	@PostMapping("/comment")
 	@CrossOrigin
 	public ResponseEntity<UserComment> postComment(@RequestBody UserComment comment){
 		UserComment postComment = userCommentService.postComment(comment);
+		User userDetails = userRepository.findById(comment.getCommentedUserId());
+
 		Response res = new Response();
 		
 		int userId = postComment.getUserId();
-        String commentDetails = "User " + postComment.getCommentedUserId() + " commented on your photo: " + postComment.getComment();
+        String commentDetails = "User " + userDetails.getUserName() + " commented on your photo: " + postComment.getComment();
 		notificationController.sendNotification(String.valueOf(userId), commentDetails);
 		if(postComment != null) {
 		return ResponseEntity
